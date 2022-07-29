@@ -63,10 +63,11 @@ mediasRouter.delete("/:mediaId", async(req,res,next)=>{
 mediasRouter.patch("/:mediaId/image", multer().single("mediaPicture"), async (req,res,next)=>{
     try {
         const fileName = req.params.mediaId + extname(req.file.originalname)
-        await saveMediasImages(fileName, req.file.buffer)
+        
 
        const media =  await findMediaByIdAndUpdate(req.params.mediaId, {imageUrl: "/img/products/" + fileName})
        if(media){
+        await saveMediasImages(fileName, req.file.buffer)
         res.send()
        }
        else{
