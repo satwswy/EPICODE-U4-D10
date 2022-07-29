@@ -53,6 +53,8 @@ mediasRouter.put("/:mediaId", checksMediasUpdateSchema, checkValidationResult, a
 
 mediasRouter.delete("/:mediaId", async(req,res,next)=>{
     try {
+
+        
         await findMediaByIdAndDelete(req.params.mediaId)
         res.status(204).send()
     } catch (error) {

@@ -1,4 +1,4 @@
-import { getMedias, writeMedias } from "../fs/tools.js"
+import { deleteMediasImages, getMedias, writeMedias } from "../fs/tools.js"
 import uniqid from 'uniqid'
 import createHttpError from "http-errors"
 
@@ -36,7 +36,7 @@ export const findMediaByIdAndUpdate = async (mediaId, updates) => {
 
 export const findMediaByIdAndDelete = async mediaId => {
     const medias = await getMedias()
-
+    
     const remainingMedias = medias.filter(media => media.id !== mediaId)
 
     if(medias.length === remainingMedias.length) throw createHttpError(
