@@ -4,9 +4,14 @@ import cors from "cors"
 import mediasRouter from "./api/medias/index.js"
 import createHttpError from "http-errors"
 import { badRequestHandler, genericErrorHandler, notFoundHandler } from "./errorHandlers.js"
+import swagger from 'swagger-ui-express'
+import yaml from "yamljs"
+import {join} from "path"
+
 
 const server = express()
 const port = process.env.PORT || 3001
+const yamlFile = yaml.load(join(process.cwd(), "./src/docs/epicMediasDefinitions.yml"))
 
 const whitelist = [process.env.FE_DEV_URL, process.env.FE_PROD_URL]
 
@@ -22,6 +27,7 @@ server.use(express.json())
 
 
 server.use("/medias", mediasRouter)
+server.use("/new/docs", swagger.serve, swagger.setup(yamlFile))
 
 
 
