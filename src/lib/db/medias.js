@@ -1,4 +1,4 @@
-import { deleteMediasImages, getMedias, writeMedias } from "../fs/tools.js"
+import { getMedias, writeMedias } from "../fs/tools.js"
 import uniqid from 'uniqid'
 import createHttpError from "http-errors"
 

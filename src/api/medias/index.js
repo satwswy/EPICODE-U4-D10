@@ -4,7 +4,9 @@ import multer from "multer"
 import { findMediaById, findMediaByIdAndDelete, findMediaByIdAndUpdate, findMedias, saveNewMedia } from "../../lib/db/medias.js"
 import { checksMediasSchema, checksMediasUpdateSchema, checkValidationResult } from "./mediasValidation.js"
 import {extname} from 'path'
-import { saveMediasImages } from "../../lib/fs/tools.js"
+import { getMedias, saveMediasImages } from "../../lib/fs/tools.js"
+import { getPDFReadableStream } from "../../lib/fs/pdf-tools.js"
+import {pipeline} from "stream"
 const mediasRouter = express.Router()
 
 mediasRouter.post("/", checksMediasSchema, checkValidationResult, async(req,res,next)=>{
@@ -79,5 +81,20 @@ mediasRouter.patch("/:mediaId/image", multer().single("mediaPicture"), async (re
         next(error)
     }
 })
+
+mediasRouter.get("/new/PDF", async (req, res, next)=>{
+    try {
+      const mediasList = await getMedias()
+      res.setHeader("Content-Disposition", "attachment; filename=medias.pdf")
+      const source = getPDFReadableStream(mediasList)
+      const destination = res
+      pipeline(source, destination, err => {
+        if(err) console.log(err)
+      })
+    } catch (error) {
+      next(error)
+      console.log(error)
+    }
+  })
 
 export default mediasRouter
